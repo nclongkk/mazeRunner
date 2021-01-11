@@ -56,17 +56,26 @@ return d;
 }
 void Quayphai(){
   Motor(1,0,100,0,1,100);
-  delay(100); // phai test
+  delay(500); // phai test
   }
 
 void Bamtrai(){
     int out;
-    float kp=1;
+    float k=2;
     const float d = 8;
-    out  = kp*(d - distanceLeft);
+    out  = k*(d - distanceLeft);
     speedmean = 100;
-    Motor(1,0,speedmean - out,1,0,speedmean + out);
+    int speedleft = speedmean +out;
+    int speedright = speedmean - out;
+    
+    if (speedleft >255) speedleft  = 255;
+    if (speedleft <0) speedleft = 0;
+    if (speedright >255) speedright = 255;
+    if (speedright <0)  speedright = 0;
+    Motor(1,0,speedleft,1,0,speedright);
+    
   }
+
 void loop() {
   distanceFront = distance(trigfront,echofront);
   distanceLeft = distance(trigleft,echoleft);
