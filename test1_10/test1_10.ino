@@ -1,16 +1,16 @@
 
 #define ENA 5
-#define IN1 2
-#define IN2 3
-#define IN3 4
-#define IN4 7
+#define IN2 2
+#define IN1 3
+#define IN4 4
+#define IN3 7
 #define ENB 6
 const int trigfront = 9;     // chân trig của HC-SR04
 const int echofront = 10;     // chân echo của HC-SR04
-const int trigleft = 13;     // chân trig của HC-SR04
-const int echoleft = 8;     // chân echo của HC-SR04
-const int trigright = 12;     // chân trig của HC-SR04
-const int echoright = 11;     // chân echo của HC-SR04
+const int trigright = 13;     // chân trig của HC-SR04
+const int echoright = 8;     // chân echo của HC-SR04
+const int trigleft = 12;     // chân trig của HC-SR04
+const int echoleft = 11;     // chân echo của HC-SR04
 
 
  float distanceFront;
@@ -61,6 +61,10 @@ void Quayphai(){
   delay(500); // phai test de chinh 
   }
 
+void Quaytrai(){
+  Motor(0,1,100,1,0,100);
+  delay(500);
+  }
 void Bamtrai(){
     int out;
     float k=2;
@@ -78,16 +82,34 @@ void Bamtrai(){
     
   }
 
+void Bamphai(){
+    int out;
+    float k=4;
+    float d = 6;
+    out  = k*(d - distanceRight);
+    int speedmean = 130;
+    int speedleft = speedmean -out;
+    int speedright = speedmean + out;
+    
+    if (speedleft >255) speedleft  = 255;
+    if (speedleft <0) speedleft = 0;
+    if (speedright >255) speedright = 255;
+    if (speedright <0)  speedright = 0;
+    Motor(1,0,speedleft,1,0,speedright);
+    
+  }
+int count = 0;
 void loop() {
   distanceFront = distance(trigfront,echofront);
-  distanceLeft = distance(trigleft,echoleft);
+//  distanceLeft = distance(trigleft,echoleft);
   distanceRight = distance(trigright,echoright);
-
+  Serial.println(distanceRight);
  if (distanceFront < 9){
-  Quayphai();
+  if (count != 0)  Quayphai();
  }
-  Bamtrai();
+ count++;
+  Bamphai();
  
-
+//Motor(1,0,0,1,0,100);
 
 }
